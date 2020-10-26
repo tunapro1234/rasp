@@ -1,5 +1,4 @@
 from rasp.res.glob import *
-from time import time
 import pygame
 
 
@@ -7,21 +6,23 @@ def main():
     pygame.display.init()
     pygame.display.set_caption(TITLE)
 
-    screen_size = (WIDTH, HEIGHT)
-    if FULLSCREEN:
-        screen = pygame.display.set_mode(screen_size, pygame.FULLSCREEN)
-    else:
-        screen = pygame.display.set_mode(screen_size)
+    clock = pygame.time.Clock()
 
+    scr_size = (WIDTH, HEIGHT)
+    scr_args = (scr_size, pygame.FULLSCREEN) if FULLSCREEN else (scr_size)
+    screen = pygame.display.set_mode(*scr_args)
+
+    run_args = (screen, clock)
     while True:
-        if runTime(screen):
+        if runtime(*run_args):
             break
 
     pygame.quit()
 
 
-def runTime(screen):
-    startTime = time()
+def runtime(screen, clock):
+    dt = clock.tick(FPS)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             return 1
@@ -32,16 +33,8 @@ def runTime(screen):
         elif pygame.mouse.get_pressed()[2]:
             pos = pygame.mouse.get_pos()
 
-    update(screen, startTime, FPS)
-    return 0
-
-
-def update(screen, startTime, fps):
-    # ekrana yazıldı
     pygame.display.update()
-    # fps düzenlemesi
-    while time() - startTime < (1 / fps):
-        pass
+    return 0
 
 
 if __name__ == "__main__":
