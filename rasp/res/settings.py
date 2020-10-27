@@ -32,8 +32,8 @@ default_profile = SettingProfile(
 
 
 class Settings:
-    default_profile_name = "master"
-    profiles = [default_profile]
+    __default_profile_name = "master"
+    __profiles = [default_profile]
 
     @classmethod
     def create_profile(cls, profile: SettingProfile):
@@ -46,12 +46,12 @@ class Settings:
                 "filename", profile.filename) is not None:
             return 2
 
-        cls.profiles.append(profile)
+        cls.__profiles.append(profile)
         return 0
 
     @classmethod
     def find_profile(cls, attr_to_search: str, attr_value: str):
-        for index, profile in enumerate(cls.profiles):
+        for index, profile in enumerate(cls.__profiles):
             if getattr(profile, attr_to_search) == attr_value:
                 return index
 
