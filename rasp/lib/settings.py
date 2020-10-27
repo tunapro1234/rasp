@@ -25,14 +25,7 @@ class SettingProfile:
         self.author = author
         self.filename = filename
         self.settings = settings
-
-    def __dict__(self):
-        return {
-            "name": self.name,
-            "author": self.author,
-            "filename": self.filename,
-            "settings": dict(self.settings),
-        }
+        self.__dict__["settings"] = self.settings.__dict__
 
 
 default_profile = SettingProfile(
@@ -152,9 +145,14 @@ class Settings:
 
     @classmethod
     def load(cls):
+        dbex.Encoder().dump(
+            {profile.name: profile.filename for profile in cls.__profiles},
+            f"rasp/res/profiles.json",
+        )
+        
         for profile in cls.__profiles:
             dbex.Encoder().dump(
-                dict(profile),
+                profile.__dict__,
                 f"rasp/res/settings/{profile.filename}.json",
             )
 
