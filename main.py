@@ -1,3 +1,4 @@
+from rasp.lib.menus.main_menu import MainMenu
 from rasp.res.glob import *
 import pygame
 
@@ -11,6 +12,8 @@ def main():
     scr_size = (WIDTH, HEIGHT)
     scr_args = (scr_size, pygame.FULLSCREEN) if FULLSCREEN else (scr_size)
     screen = pygame.display.set_mode(*scr_args)
+
+    print(f"T: {type(MainMenu)}")
 
     run_args = (screen, clock)
     while True:
