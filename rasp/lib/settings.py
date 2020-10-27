@@ -88,6 +88,36 @@ class Settings:
         return "profile not found"
 
     @classmethod
+    def rename_profile(cls, name: str, new_name: str, filename: bool):
+        attr = "name" if not filename else "filename"
+        if name == default_profile.name:
+            return "master profile cannot be touched"
+
+        elif (id := cls.__find_profile("name", name)) is not None:
+            if cls.__find_profile(attr, new_name) is None:
+                if name == cls.__default_profile_name:
+                    cls.__default_profile_name = new_name
+                if name == cls.__selected_profile:
+                    cls.__selected_profile = new_name
+
+                cls.__profiles[id].name = new_name
+                return 0
+            return "name used before"
+
+        return "profile not found"
+
+    @classmethod
+    def update_profile_settings(cls, name: str, new_settings: SettingStruct):
+        if name == default_profile.name:
+            return "master profile cannot be touched"
+
+        elif (id := cls.__find_profile("name", name)) is not None:
+            cls.__profiles[id].settings = new_settings
+            return 0
+
+        return "profile not found"
+
+    @classmethod
     def change_default_profile(cls, name: str):
         if name == cls.__default_profile_name:
             return 0
@@ -108,3 +138,11 @@ class Settings:
             return 0
 
         return "profile not found"
+
+    @classmethod
+    def load(cls):
+        pass
+
+    @classmethod
+    def save(cls):
+        pass
