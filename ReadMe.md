@@ -1,4 +1,5 @@
 # RASP
+Evet, buraya boş şeyleri yazmamam gerekiyor ama artık projelerime başkalarının bakmadığını biliyorum
 
 ## Boş yazılım planlaması
 Bu planlamaları burada yapmak ne kadar mantıklı bilmiyorum. Neyse

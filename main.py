@@ -3,6 +3,22 @@ from rasp.res.glob import *
 import pygame
 
 
+"""## TO DO ######################################################
+
+	BaseMenu setting ayarlamaları
+	
+	Settings.delete_profile()
+	Settings.change_default_profile()
+	Settings.load_from_file(profile_name)
+	Settings.load_all_settings()
+	Settings.selected_profile: name
+	
+	
+	
+###################################################### TO DO ##"""
+
+
+
 def main():
     pygame.display.init()
     pygame.display.set_caption(TITLE)
