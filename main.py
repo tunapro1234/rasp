@@ -1,22 +1,16 @@
 from rasp.lib.menus.main_menu import MainMenu
 from rasp.res.glob import *
 import pygame
-
-
 """## TO DO ######################################################
 
 	BaseMenu setting ayarlamaları
 	
-	Settings.delete_profile()
-	Settings.change_default_profile()
-	Settings.load_from_file(profile_name)
-	Settings.load_all_settings()
-	Settings.selected_profile: name
-	
-	
+	Menuler için Templateler
+    
+    Default ve selected profile'ı kaydet
+    
 	
 ###################################################### TO DO ##"""
-
 
 
 def main():
@@ -50,6 +44,10 @@ def runtime(screen, clock):
         elif pygame.mouse.get_pressed()[2]:
             pos = pygame.mouse.get_pos()
 
+    #region update
+    MainMenu.draw(dt=dt)
+
+    # endregion
     pygame.display.update()
     return 0
 

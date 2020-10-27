@@ -11,6 +11,7 @@ class TestSettings(unittest.TestCase):
     def test_save_profiles(self):
         profile_name = "test"
         profile_filename = "testfile"
+
         Settings.create_profile(SettingProfile(profile_name, profile_filename))
         Settings.save()
 
