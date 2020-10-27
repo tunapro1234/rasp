@@ -1,4 +1,5 @@
-import dbex
+from rasp.res.glob import encoder, decoder, profile_files_path, profiles_path
+import os
 
 
 # region boş
@@ -144,18 +145,74 @@ class Settings:
         return "profile not found"
 
     @classmethod
-    def load(cls):
-        dbex.Encoder().dump(
-            {profile.name: profile.filename for profile in cls.__profiles},
-            f"rasp/res/profiles.json",
-        )
-        
-        for profile in cls.__profiles:
-            dbex.Encoder().dump(
-                profile.__dict__,
-                f"rasp/res/settings/{profile.filename}.json",
+    def reset(cls, hard=False):
+        if hard:
+            os.remove(profiles_path)
+            for profile in cls.__profiles:
+                if profile.name != default_profile.name:
+                    os.remove(f"{profile_files_path}/{profile.filename}.json")
+
+        cls.__default_profile_name = default_profile.name
+        cls.__selected_profile = default_profile.name
+        cls.__profiles = [default_profile]
+
+    @classmethod
+    def save_profile_names(cls):
+        try:
+            encoder.dump(
+                {
+                    profile.name: profile.filename
+                    for profile in cls.__profiles
+                    if profile.name != default_profile.name
+                },
+                profiles_path,
             )
+        except:
+            return 1
+        return 0
+
+    @classmethod
+    def save_profile(cls, name):
+        profile = name if type(name) == SettingProfile else cls.__profiles[
+            cls.__find_profile("name", name)]
+
+        if profile.name == default_profile.name:
+            return 0
+
+        try:
+            encoder.dump(
+                profile.__dict__,
+                f"{profile_files_path}/{profile.filename}.json",
+            )
+        except:
+            return 1
+        return 0
 
     @classmethod
     def save(cls):
+        if (rv := cls.save_profile_names()) != 0:
+            return rv
+
+        try:
+            for profile in cls.__profiles:
+                if (rv := cls.save_profile(profile)) != 0:
+                    return rv
+
+        except:
+            return 1
+        return 0
+
+    @classmethod
+    def load_profiles(cls):
+        # profiles_dict = decoder.load(file=profiles_path)
+        # for name, filename in profiles_dict.items():
+        #     pass
+        pass
+
+    @classmethod
+    def load_profile(cls):
+        pass
+
+    @classmethod
+    def load(cls):
         pass
