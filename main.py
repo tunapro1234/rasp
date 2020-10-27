@@ -10,7 +10,7 @@ def main():
     clock = pygame.time.Clock()
 
     scr_size = (WIDTH, HEIGHT)
-    scr_args = (scr_size, pygame.FULLSCREEN) if FULLSCREEN else (scr_size)
+    scr_args = (scr_size, pygame.FULLSCREEN) if FULLSCREEN else (scr_size, )
     screen = pygame.display.set_mode(*scr_args)
 
     run_args = (screen, clock)
