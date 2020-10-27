@@ -1,3 +1,6 @@
+import dbex
+
+
 # region boş
 class SettingStruct:
     def __init__(self, setting_1, setting_2):
@@ -22,6 +25,14 @@ class SettingProfile:
         self.author = author
         self.filename = filename
         self.settings = settings
+
+    def __dict__(self):
+        return {
+            "name": self.name,
+            "author": self.author,
+            "filename": self.filename,
+            "settings": dict(self.settings),
+        }
 
 
 default_profile = SettingProfile(
@@ -141,7 +152,11 @@ class Settings:
 
     @classmethod
     def load(cls):
-        pass
+        for profile in cls.__profiles:
+            dbex.Encoder().dump(
+                dict(profile),
+                f"rasp/res/settings/{profile.filename}.json",
+            )
 
     @classmethod
     def save(cls):

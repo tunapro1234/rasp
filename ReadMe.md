@@ -27,3 +27,5 @@ Arayüz için temalardan bir tanesi [MEGABOI](https://github.com/tunapro1234/MEG
 
 ### Settings, aaahhhh
 Settings üzerinden obje oluşturabilirim çünkü farklı ayar seçeneklerinin olmasını istiyorum, yani ayarları kaydedip sonra başka geçip onu da kaydedip sonra ilk kaydettiğine dönüp kolayca kaydettiğin sonrakine geçebilmek için. farklı setting modları yaratabilmek için işte
+
+KAYIT İŞLEMLERİ İÇİN [DBEX](https://github.com/tunapro1234/DBEX) OLLEY
