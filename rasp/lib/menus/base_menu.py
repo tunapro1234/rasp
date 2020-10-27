@@ -1,3 +1,6 @@
+from rasp.res.settings import settings
+
+
 class MetaMenu(type):
     def __new__(cls, name, bases, body):
         # print(cls, name, bases, body, sep="\n")
@@ -13,5 +16,4 @@ class MetaMenu(type):
 
 
 class BaseMenu(metaclass=MetaMenu):
-    setting_1 = 0
-    setting_2 = 0
+    pass # gelicem
