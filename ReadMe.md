@@ -22,4 +22,7 @@ Arayüz için temalardan bir tanesi [MEGABOI](https://github.com/tunapro1234/MEG
 
 <br>
 
-Şimdi küçük bir mesele var, temalar class objesi olarak tutulabilir ama draw fonksiyonları tema için bir parametre almaları gerekiyor, (tem a  preview olayları için) 
+Şimdi küçük bir mesele var, temalar class objesi olarak tutulabilir ama draw fonksiyonları tema için bir parametre almaları gerekiyor, (tema preview olayları için)
+
+### Settings, aaahhhh
+Settings üzerinden obje oluşturabilirim çünkü farklı ayar seçeneklerinin olmasını istiyorum, yani ayarları kaydedip sonra başka geçip onu da kaydedip sonra ilk kaydettiğine dönüp kolayca kaydettiğin sonrakine geçebilmek için. farklı setting modları yaratabilmek için işte
