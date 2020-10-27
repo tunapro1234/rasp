@@ -45,7 +45,7 @@ def runtime(screen, clock):
             pos = pygame.mouse.get_pos()
 
     #region update
-    MainMenu.draw(dt=dt)
+    MainMenu.draw(screen, dt=dt)
 
     # endregion
     pygame.display.update()
