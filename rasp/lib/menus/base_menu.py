@@ -1,4 +1,4 @@
-from rasp.res.settings import settings
+from rasp.lib.settings import Settings
 
 
 class MetaMenu(type):
@@ -16,4 +16,4 @@ class MetaMenu(type):
 
 
 class BaseMenu(metaclass=MetaMenu):
-    pass # gelicem
+    pass  # gelicem

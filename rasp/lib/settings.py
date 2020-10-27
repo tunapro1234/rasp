@@ -1,4 +1,4 @@
-# region boş 
+# region boş
 class SettingStruct:
     def __init__(self, setting_1, setting_2):
         self.setting_1 = setting_1
@@ -31,7 +31,6 @@ default_profile = SettingProfile(
     settings=default_settings,
 )
 # endregion
-
 """
 Settings.delete_profile()
 Settings.change_default_profile()
@@ -41,6 +40,7 @@ Settings.load_from_file(profile_name)
 Settings.load_all_settings()
 
 """
+
 
 class Settings:
     # default ve selectedın farkı yeni oluşturulan profiller default üzerinden oluşturulacak
