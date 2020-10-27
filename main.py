@@ -13,8 +13,6 @@ def main():
     scr_args = (scr_size, pygame.FULLSCREEN) if FULLSCREEN else (scr_size)
     screen = pygame.display.set_mode(*scr_args)
 
-    print(f"T: {type(MainMenu)}")
-
     run_args = (screen, clock)
     while True:
         if runtime(*run_args):
