@@ -18,12 +18,10 @@ default_settings = SettingStruct(
 class SettingProfile:
     def __init__(self,
                  name: str,
-                 author: str,
                  filename: any,
                  settings: SettingStruct = default_settings):
 
         self.name = name
-        self.author = author
         self.filename = filename
         self.settings = settings
         self.__dict__["settings"] = self.settings.__dict__
@@ -31,7 +29,6 @@ class SettingProfile:
 
 default_profile = SettingProfile(
     name="master",
-    author="TUNAPRO1234",
     filename="default_settings",
     settings=default_settings,
 )
@@ -181,7 +178,7 @@ class Settings:
 
         try:
             encoder.dump(
-                profile.__dict__,
+                profile.settings.__dict__,
                 f"{profile_files_path}/{profile.filename}.json",
             )
         except:
@@ -203,16 +200,12 @@ class Settings:
         return 0
 
     @classmethod
-    def load_profiles(cls):
-        # profiles_dict = decoder.load(file=profiles_path)
-        # for name, filename in profiles_dict.items():
-        #     pass
-        pass
-
-    @classmethod
-    def load_profile(cls):
-        pass
-
-    @classmethod
     def load(cls):
-        pass
+        profiles_dict = decoder.load(profiles_path)
+
+        for name, filename in profiles_dict.items():
+            cls.__profiles.append(
+                SettingProfile(
+                    name, filename,
+                    SettingStruct(*decoder.load(
+                        "{profile_files_path}/{filename}.json"))))
