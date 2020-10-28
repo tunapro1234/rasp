@@ -24,12 +24,17 @@ Z = A
 class B(Z):
     name = "B"
 
+    @classmethod
+    def init(cls):
+        global A
+        A = cls
+
     def __init__(self, *a, **kw):
         print("B.__init__")
         super().__init__(*a, **kw)
 
 
-A = B
-
+B.init()
+# A = B
 print(func().__dict__)
 print(type(func()).__dict__)

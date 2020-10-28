@@ -1,6 +1,5 @@
 from rasp.lib.menus.main_menu import MainMenu
 from rasp.res.glob import *
-import pygame
 """## TO DO ######################################################
 
             Settings içinde cls.__profile'ı dicte çevir 

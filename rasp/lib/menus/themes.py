@@ -73,5 +73,5 @@ class TestTheme(base.BaseMenu):
 theme_classes = {
     themes.test: TestTheme,
     themes.megaboi: MegaboiTheme,
-    themes.text_based: TextBasedTheme
+    themes.textbased: TextBasedTheme
 }
