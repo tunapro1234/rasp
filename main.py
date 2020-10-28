@@ -2,13 +2,7 @@ from rasp.lib.menus.main_menu import MainMenu
 from rasp.res.glob import *
 """## TO DO ######################################################
 
-            Settings içinde cls.__profile'ı dicte çevir 
-        {name:{"filename":filename, "settings":settings}, } 
-    şeklinde. find vs işleriyle uğraşmama da gerek kalmaz
-
-    BaseMenu setting ayarlamaları
-
-    Menuler için Templateler
+    BaseMenu setting ayarlamaları (?)
     
     Default ve selected profile'ı kaydet
     

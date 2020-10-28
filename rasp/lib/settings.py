@@ -4,32 +4,15 @@ import os
 
 # region boş
 class SettingStruct:
-    def __init__(self, theme=default_theme, setting_1=0, setting_2=0):
+    def __init__(self, theme=default_theme, setting_1=0, setting_2=0, *kw):
         self.theme = theme
         self.setting_1 = setting_1
         self.setting_2 = setting_2
 
 
 default_settings = SettingStruct()
+default_profile_name = "master"
 
-
-class SettingProfile:
-    def __init__(self,
-                 name: str,
-                 filename: any,
-                 settings: SettingStruct = default_settings):
-
-        self.name = name
-        self.filename = filename
-        self.settings = settings
-        # self.__dict__["settings"] = self.settings.__dict__
-
-
-default_profile = SettingProfile(
-    name="master",
-    filename="default_settings",
-    settings=default_settings,
-)
 # endregion
 """
 Settings.delete_profile()
@@ -44,47 +27,32 @@ Settings.load_all_settings()
 
 class Settings:
     # default ve selectedın farkı yeni oluşturulan profiller default üzerinden oluşturulacak
-    __selected_profile_name = default_profile.name
-    __default_profile_name = default_profile.name
-    __selected_profile = default_profile
-    __profiles = [default_profile]
+    __profiles = {default_profile_name: default_settings}
+    __selected_profile_name = default_profile_name
+    __default_profile_name = default_profile_name
+    __current_settings = default_settings
 
     @classmethod
-    def __find_profile(cls, attr_to_search: str, attr_value: str):
-        for index, profile in enumerate(cls.__profiles):
-            if getattr(profile, attr_to_search) == attr_value:
-                return index
-
-        return None
-
-    @classmethod
-    def create_profile(cls, profile: SettingProfile):
-        # Eğer aynı isimde bir profil bulunursa
-        if cls.__find_profile("name", profile.name) is not None:
-            return "name used before"
-
-        # Eğer profil kaydedilecekse ve aynı dosya isiminde bir profil bulunursa
-        if profile.filename is not None and cls.__find_profile(
-                "filename", profile.filename) is not None:
-            return "filename used before"
-
-        cls.__profiles.append(profile)
-        return 0
+    def create_profile(cls, name: str, settings: SettingStruct):
+        if name not in cls.__profiles:
+            cls.__profiles[name] = settings
+            return 0
+        return "name used before"
 
     @classmethod
     def delete_profile(cls, name: str):
         # ana profil silinemez
-        if name == default_profile.name:
+        if name == default_profile_name:
             return "master profile cannot be deleted"
 
-        elif (id := cls.__find_profile("name", name)) is not None:
-            del cls.__profiles[id]
+        elif name in cls.__profiles:
+            del cls.__profiles[name]
 
             if name == cls.__default_profile_name:
-                cls.__default_profile_name = default_profile.name
+                cls.__default_profile_name = default_profile_name
             if name == cls.__selected_profile_name:
-                cls.__selected_profile_name = default_profile.name
-                cls.__selected_profile = default_profile
+                cls.__selected_profile_name = default_profile_name
+                cls.__current_settings = default_settings
 
             return 0
 
@@ -92,18 +60,18 @@ class Settings:
 
     @classmethod
     def rename_profile(cls, name: str, new_name: str, filename: bool):
-        attr = "name" if not filename else "filename"
-        if name == default_profile.name:
-            return "master profile cannot be touched"
+        if name == default_profile_name:
+            return "master profile cannot be renamed"
 
-        elif (id := cls.__find_profile("name", name)) is not None:
-            if cls.__find_profile(attr, new_name) is None:
-                cls.__profiles[id].name = new_name
+        elif name in cls.__profiles:
+            if new_name not in cls.__profiles:
+                cls.__profiles[new_name] = cls.__profiles[name]
+                del cls.__profiles[name]
 
                 if name == cls.__default_profile_name:
                     cls.__default_profile_name = new_name
                 if name == cls.__selected_profile_name:
-                    cls.__selected_profile = cls.__profiles[id]
+                    cls.__current_settings = cls.__profiles[new_name]
                     cls.__selected_profile_name = new_name
 
                 return 0
@@ -113,11 +81,11 @@ class Settings:
 
     @classmethod
     def update_profile_settings(cls, name: str, new_settings: SettingStruct):
-        if name == default_profile.name:
+        if name == default_profile_name:
             return "master profile cannot be touched"
 
-        elif (id := cls.__find_profile("name", name)) is not None:
-            cls.__profiles[id].settings = new_settings
+        elif name in cls.__profiles:
+            cls.__profiles[name] = new_settings
             return 0
 
         return "profile not found"
@@ -127,7 +95,7 @@ class Settings:
         if name == cls.__default_profile_name:
             return 0
 
-        elif cls.__find_profile("name", name) is not None:
+        elif name in cls.__profiles:
             cls.__default_profile_name = name
             return 0
 
@@ -138,8 +106,8 @@ class Settings:
         if name == cls.__selected_profile_name:
             return 0
 
-        elif (id := cls.__find_profile("name", name)) is not None:
-            cls.__selected_profile = cls.__profiles[id]
+        elif name in cls.__profiles:
+            cls.__current_settings = cls.__profiles[name]
             cls.__selected_profile_name = name
             return 0
 
@@ -152,27 +120,27 @@ class Settings:
                 os.remove(profiles_path)
             except FileNotFoundError:
                 pass
-            for profile in cls.__profiles:
-                if profile.name != default_profile.name:
+
+            for name in cls.__profiles:
+                if name != default_profile_name:
                     try:
-                        os.remove(f"{profile_files_path}/{profile.filename}.json")
+                        os.remove(f"{profile_files_path}/{name}.json")
                     except FileNotFoundError:
                         pass
 
-        cls.__selected_profile_name = default_profile.name
-        cls.__default_profile_name = default_profile.name
-        cls.__selected_profile = default_profile
-        cls.__profiles = [default_profile]
+        cls.__profiles = {default_profile_name: default_settings}
+        cls.__selected_profile_name = default_profile_name
+        cls.__default_profile_name = default_profile_name
+        cls.__current_settings = default_settings
 
     @classmethod
     def save_profile_names(cls):
         try:
             encoder.dump(
-                {
-                    profile.name: profile.filename
-                    for profile in cls.__profiles
-                    if profile.name != default_profile.name
-                },
+                [
+                    name for name in cls.__profiles
+                    if (name != default_profile_name)
+                ],
                 profiles_path,
             )
         except:
@@ -180,18 +148,15 @@ class Settings:
         return 0
 
     @classmethod
-    def save_profile(cls, name):
-        profile = name if type(name) == SettingProfile else cls.__profiles[
-            cls.__find_profile("name", name)]
+    def save_profile(cls, name, settings: SettingStruct = None):
+        settings = cls.__profiles[name] if settings is None else settings
 
-        if profile.name == default_profile.name:
+        if name == default_profile_name:
             return 0
 
         try:
-            encoder.dump(
-                {key:(value.__dict__ if key == "settings" else value) for key, value in profile.settings.__dict__.items()},
-                f"{profile_files_path}/{profile.filename}.json",
-            )
+            encoder.dump(settings.__dict__,
+                         f"{profile_files_path}/{name}.json")
         except:
             return 1
         return 0
@@ -212,11 +177,8 @@ class Settings:
 
     @classmethod
     def load(cls):
-        profiles_dict = decoder.load(profiles_path)
+        profiles_list = decoder.load(profiles_path)
 
-        for name, filename in profiles_dict.items():
-            cls.__profiles.append(
-                SettingProfile(
-                    name, filename,
-                    SettingStruct(*decoder.load(
-                        "{profile_files_path}/{filename}.json"))))
+        for name in profiles_list:
+            cls.__profiles[name] = SettingStruct(
+                *decoder.load("{profile_files_path}/{filename}.json"))
