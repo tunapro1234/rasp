@@ -3,13 +3,17 @@ from rasp.res.glob import *
 import pygame
 """## TO DO ######################################################
 
-	BaseMenu setting ayarlamaları
-	
-	Menuler için Templateler
+            Settings içinde cls.__profile'ı dicte çevir 
+        {name:{"filename":filename, "settings":settings}, } 
+    şeklinde. find vs işleriyle uğraşmama da gerek kalmaz
+
+    BaseMenu setting ayarlamaları
+
+    Menuler için Templateler
     
     Default ve selected profile'ı kaydet
     
-	
+    
 ###################################################### TO DO ##"""
 
 

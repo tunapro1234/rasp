@@ -12,7 +12,7 @@ class themes:
     test = -1
     empty = 0
     megaboi = 1
-    text_based = 2
+    textbased = 2
 
 
 class colors:
