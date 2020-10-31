@@ -1,11 +1,6 @@
 from rasp.lib.menus.main_menu import MainMenu
 from rasp.res.glob import *
 """## TO DO ######################################################
-
-    BaseMenu setting ayarlamaları (?)
-    
-    Default ve selected profile'ı kaydet
-    
     
 ###################################################### TO DO ##"""
 

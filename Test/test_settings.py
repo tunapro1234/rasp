@@ -1,5 +1,5 @@
 from rasp.res.glob import encoder, decoder, profile_files_path, profiles_path
-from rasp.lib.settings import SettingProfile, Settings
+from rasp.lib.settings import Settings
 import unittest
 import os
 
@@ -8,37 +8,34 @@ class TestSettings(unittest.TestCase):
     def setUp(self):
         Settings.reset(hard=True)
 
-    def test_save_profiles(self):
+    def test_save_profile_names(self):
         profile_name = "test"
-        profile_filename = "testfile"
 
-        Settings.create_profile(SettingProfile(profile_name, profile_filename))
-        Settings.save()
+        Settings.create_profile(profile_name)
+        Settings.save_profile_names()
 
         profiles_dict = decoder.load(profiles_path)
 
-        for name, filename in profiles_dict.items():
+        for name in profiles_dict:
             self.assertEqual(name, profile_name)
-            self.assertEqual(filename, profile_filename)
 
     def test_reset(self):
         profile_name = "test"
-        profile_filename = "testfile"
 
-        old_profiles = tuple(Settings._Settings__profiles)
-        Settings.create_profile(SettingProfile(profile_name, profile_filename))
+        old_profiles = dict(Settings._Settings__profiles)
+        Settings.create_profile(profile_name)
 
-        self.assertNotEqual(list(old_profiles), Settings._Settings__profiles)
+        self.assertNotEqual(old_profiles, Settings._Settings__profiles)
         Settings.reset()
 
-        self.assertEqual(list(old_profiles), Settings._Settings__profiles)
+        self.assertEqual(old_profiles, Settings._Settings__profiles)
 
     def test_reset_hard(self):
         profile_name = "test"
         profile_filename = "testfile"
 
         old_profiles = tuple(Settings._Settings__profiles)
-        Settings.create_profile(SettingProfile(profile_name, profile_filename))
+        Settings.create_profile(profile_name)
 
         self.assertEqual(Settings.save(), 0)
 
@@ -50,3 +47,24 @@ class TestSettings(unittest.TestCase):
                 False)
 
         self.assertEqual(os.path.exists(profile_filename), False)
+
+    def test_load(self):
+        pass
+
+    def test_save(self):
+        pass
+
+    def test_save_profiles(self):
+        pass
+
+    def test_delete(self):
+        pass
+
+    def test_rename(self):
+        pass
+
+    def test_select(self):
+        pass
+
+    def test_selected_after_load(self):
+        pass

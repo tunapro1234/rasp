@@ -33,7 +33,8 @@ class Settings:
     __current_settings = default_settings
 
     @classmethod
-    def create_profile(cls, name: str, settings: SettingStruct):
+    def create_profile(cls, name: str, settings: SettingStruct = None):
+        settings = SettingStruct() if settings is None else settings
         if name not in cls.__profiles:
             cls.__profiles[name] = settings
             return 0
@@ -47,6 +48,10 @@ class Settings:
 
         elif name in cls.__profiles:
             del cls.__profiles[name]
+            try:
+                os.remove(f"{profile_files_path}/{name}.json")
+            except FileNotFoundError:
+                pass
 
             if name == cls.__default_profile_name:
                 cls.__default_profile_name = default_profile_name
@@ -66,7 +71,7 @@ class Settings:
         elif name in cls.__profiles:
             if new_name not in cls.__profiles:
                 cls.__profiles[new_name] = cls.__profiles[name]
-                del cls.__profiles[name]
+                cls.delete_profile(name)
 
                 if name == cls.__default_profile_name:
                     cls.__default_profile_name = new_name
@@ -137,10 +142,16 @@ class Settings:
     def save_profile_names(cls):
         try:
             encoder.dump(
-                [
-                    name for name in cls.__profiles
-                    if (name != default_profile_name)
-                ],
+                {
+                    "default":
+                    cls.__default_profile_name,
+                    "selected":
+                    cls.__selected_profile_name,
+                    "profiles": [
+                        name for name in cls.__profiles
+                        if (name != default_profile_name)
+                    ]
+                },
                 profiles_path,
             )
         except:
@@ -177,8 +188,12 @@ class Settings:
 
     @classmethod
     def load(cls):
-        profiles_list = decoder.load(profiles_path)
+        loaded = decoder.load(profiles_path)
 
-        for name in profiles_list:
+        for name in loaded["profiles"]:
             cls.__profiles[name] = SettingStruct(
-                *decoder.load("{profile_files_path}/{filename}.json"))
+                *decoder.load(f"{profile_files_path}/{name}.json"))
+
+        cls.__current_settings = cls.__profiles[loaded["selected"]]
+        cls.__selected_profile_name = loaded["selected"]
+        cls.__default_profile_name = loaded["default"]
